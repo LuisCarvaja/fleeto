@@ -1,0 +1,22 @@
+
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Instala dependencias del sistema necesarias para psycopg2 y compilación
+RUN apt-get update && apt-get install -y gcc libpq-dev && apt-get clean
+
+# Copia el archivo de dependencias desde backend
+COPY ../backend/requirements.txt .
+
+# Instala dependencias de Python
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copia el código fuente del backend
+COPY ../backend/ .
+
+# Expone el puerto para el servidor de desarrollo
+EXPOSE 8000
+
+# Comando por defecto (puede ser sobrescrito en docker-compose)
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

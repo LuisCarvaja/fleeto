@@ -1,0 +1,19 @@
+FROM node:20-alpine
+
+# Directorio de trabajo dentro del contenedor
+WORKDIR /app
+
+# Copiar archivos del frontend (solo package.json y lock para instalar deps primero)
+COPY ../frontend/package*.json ./
+
+# Instala dependencias
+RUN npm install
+
+# Copia todo el proyecto
+COPY ../frontend/ .
+
+# Expone el puerto de Vite (default)
+EXPOSE 5173
+
+# Comando por defecto (sobrescribible)
+CMD ["npm", "run", "dev"]
